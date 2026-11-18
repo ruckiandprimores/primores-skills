@@ -9,32 +9,34 @@ A free Claude skill that checks your Meta ads every morning and tells you, in pl
 - Yesterday's spend, results and cost per result, next to your 7-day average.
 - A line when spend jumped or dropped against your usual day.
 - **One thing to do today**, so you don't have to work out the priority yourself.
-- Ads to **consider pausing**: money spent for a week with nothing to show.
-- Ads to **watch**: no results yesterday, cost per result climbing, or one or two results at double your target.
+- Ads to **consider pausing**, only when the numbers say it's unlikely to be bad luck ("about 2 in 100 that this is chance").
+- Ads to **watch**: an ad whose weekly average still looks fine but which stopped bringing leads in the last few days, fewer people clicking, or one or two results at well over your target.
+- Ads that are **too early to tell**, with the date they'll be clear. This is what stops you pausing a good ad after two quiet days.
+- A nudge to **test your own form** when people keep clicking but leads stop.
 - Ads **doing well** against your target.
 - The ad-set problems that quietly cost money: audiences seeing the same ad too often, ad sets stuck in "learning limited", budgets not spending.
 
-Every flag comes with its number and the reason, so you can disagree. The thresholds are written down in [rules.md](skills/meta-ads-daily-check/references/rules.md), and a small script applies them the same way every day.
+Every flag comes with its number and the reason, so you can disagree. Flags are decided by how likely the result is by chance, not by fixed rules, so a €5-a-day account and a €500-a-day account are judged fairly. The thresholds are written down in [rules.md](skills/meta-ads-daily-check/references/rules.md), and a small script applies them the same way every day.
 
 ## Sample output
 
 > **Meta ads, Tuesday 17 November (yesterday)**
-> Spent €121.70 · 4 leads · €30.43 per lead (7-day average: €19.62, your target: €25)
-> That's 28% more than your usual €95.31 a day. All five ads spent more than their daily average, not just one, which usually means a budget was raised. Your export doesn't include budgets, so check whether someone changed one. Yesterday's numbers can also still move for a few hours, because some leads get counted late.
+> Spent €68 · 1 lead · €68 per lead (7-day average: €31.33, against your €30 target)
+> Yesterday's numbers can still move by a few hours' worth of late leads, so treat that €68 as provisional.
 > 
-> **Do today:** Pause the Free survey carousel. It has spent €96.30 this week, €21.10 of it yesterday, and brought no leads.
+> **Do today:** get a fresh version of the Whitening offer video made and into its ad set. It was your best ad and has stopped bringing leads; at €30 a day it's where most of the money is leaking.
 > 
 > **Consider pausing**
-> - Free survey carousel (Homeowners 35-65 Vilnius): €96.30 in 7 days and 0 leads. That's almost four leads' worth at your €25 target with nothing to show for it. In the same ad set, the savings video gets leads at €17.21, so the audience isn't the problem. This ad is.
+> - Invisalign reel (Adults 20-40 15km): spent €75 in 7 days with no leads. At €30 a lead it should have brought about 2.5, and the chance of none by bad luck is about 8 in 100. That's a pattern, not a bad week.
 > 
 > **Watch today**
-> - Grant explainer static (Homeowners 35-65 Kaunas): yesterday's one lead cost €27.90, against €16.69 a lead over the week. One lead is too few to call it, so leave it on and look again tomorrow.
+> - Whitening offer video (Women 25-50 10km): 7 leads for €120 (€17 each) in the first four days, then nothing for €90 over the last three, when about 5 were expected. About 1 in 100 that this is bad luck. Clicks fell at the same time: 1.96% of people who saw it clicked in the first three days, 0.91% in the last three. People in that 10 km radius are tiring of this video, so a new cut of the same whitening offer (new opening, new visuals) is a better fix than pausing. If you don't have a new version up by Friday and it still has no leads, pause it then.
+> 
+> **Too early to tell**
+> - Implant consult carousel (Adults 45-70 15km): 1 lead for €45. That looks slow, but there's about a 56 in 100 chance it's just luck. It needs about €117 spent to tell, which at €6-7 a day is around Monday 30 November. Leave it until then.
 > 
 > **Doing well**
-> - Heat pump savings video: €17.21 per lead over 7 days (14 leads) vs your €25 target
-> - Testimonial reel: €12.20 per lead over 7 days (5 leads) vs €25. People saw it 4.6 times on average this week, which would be a lot for a cold audience. This one is retargeting your site visitors, though, so a high number is normal. Watch it only if the cost per lead starts to climb.
-> 
-> Yesterday's €30.43 per lead is above your target, but most of that is the €21.10 the survey carousel spent with no leads. Without it, the other four ads got 4 leads for €100.60, about €25 each.
+> - Family dentist static (Parents 28-45 10km): €20 per lead over 7 days vs your €30 target, a lead every day.
 > 
 > Nothing here changes your ads. To pause one: Ads Manager > Ads > switch it off.
 
@@ -42,7 +44,12 @@ Every flag comes with its number and the reason, so you can disagree. The thresh
 
 ## What it is honestly good at, and what it isn't
 
-We tested it against Claude with no skill on the same numbers. Plain Claude spots most of the same problems if you hand it the data and ask well. What the skill adds is the routine: it pulls the numbers itself through the Meta Ads connector, uses the same rules and the same one-screen format every morning, asks for your real target cost per lead instead of guessing, and stays read-only. If you already have a media buyer reading your account daily, you don't need this.
+We tested it against Claude with no skill on the same numbers, four made-up accounts. Plain Claude spots most of the big problems if you hand it the data and ask well. What the skill adds:
+- **The routine.** It pulls the numbers itself through the Meta Ads connector, uses the same rules and the same one-screen format every morning, and stays read-only.
+- **The odds.** It says how likely a bad-looking number is to be chance, and when an unproven ad will be clear. Plain Claude tends to say "too early" without saying until when.
+- **Day-by-day reading.** With a by-day export or the connector, it catches an ad that stopped working this week while its weekly average still looks fine.
+
+What it can't know: whether your leads were any good. Cost per lead can look great while nobody picks up the phone. If you already have a media buyer reading your account daily, you don't need this.
 
 ## Setup (5 minutes)
 

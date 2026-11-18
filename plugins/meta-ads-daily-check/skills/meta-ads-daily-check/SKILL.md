@@ -15,16 +15,20 @@ The Meta Ads connector can also edit and pause ads. Don't use any tool that chan
 
 **With the Meta Ads connector** (preferred):
 1. If you don't know the ad account, call `ads_get_ad_accounts` and use the one the owner names. If there are several and they didn't say, ask once. Skip accounts where `is_queryable` is false and tell them why.
-2. Call `ads_get_ad_entities` at `level` = `ad`, filtered to delivering ads (`effective_status` IN `ACTIVE`), twice:
-   - `date_preset` = `yesterday`, fields: `name`, `adset_name`, `campaign_name`, `effective_status`, `amount_spent`, `results`, `cost_per_result`
-   - `date_preset` = `last_7d`, fields: `amount_spent`, `results`, `cost_per_result`, `impressions`, `frequency`
-   Verify field names with `ads_get_field_context` first if the call rejects one. Page through with `cursor` until there are no more.
-3. For daily budgets and learning status, call it once more at `level` = `adset` with `daily_budget`, `learning_stage_info`, `effective_status`.
-4. Write one CSV row per ad with the columns the script expects (see below) and run the script.
+2. Call `ads_get_ad_entities` at `level` = `ad`, filtered to delivering ads (`effective_status` IN `ACTIVE`), with `date_preset` = `last_7d` and `time_increment` = `"1"` (one row per ad per day). Fields: `name`, `adset_name`, `campaign_name`, `amount_spent`, `results`, `impressions`, `link_click`. Write these rows to `daily.csv` with the columns `ad, ad_set, campaign, date, spend, results, impressions, link_clicks`. Page through with `cursor` until there are no more.
+3. Call it once more at `level` = `ad`, `date_preset` = `last_7d`, no `time_increment`, for `frequency` (frequency can't be added up from daily rows). And once at `level` = `adset` for `daily_budget`, `learning_stage_info`, `effective_status`. Put these in a summary CSV (one row per ad, columns below) if you want those flags; otherwise skip it.
+4. Verify field names with `ads_get_field_context` first if a call rejects one.
+5. Run the script.
 
-**Without the connector:** ask the owner to export from Ads Manager. `references/export-from-ads-manager.md` has the exact clicks; it takes them about a minute. Map the export's columns to the script's columns.
+**Without the connector:** ask the owner to export from Ads Manager. `references/export-from-ads-manager.md` has the clicks; the best export is one with a breakdown by day, because that's what the trend flags need. Map the export's columns to the script's columns.
 
-**Script:** `scripts/daily_check.py <file.csv> [--target-cpr N] [--currency EUR]`. Columns: `ad, ad_set, campaign, status, spend_yday, results_yday, spend_7d, results_7d, impressions_7d, frequency_7d, daily_budget, learning`. It prints JSON with totals and flags. Use its numbers as they are; the thresholds are explained in `references/rules.md`.
+**Script:** `scripts/daily_check.py [summary.csv] [--daily daily.csv] [--target-cpr N] [--currency EUR]`.
+- `--daily` (one row per ad per day, last 7 days): `ad, ad_set, campaign, date, spend, results, impressions, link_clicks`. On its own it's enough; the latest date counts as yesterday.
+- summary CSV (one row per ad): `ad, ad_set, campaign, status, spend_yday, results_yday, spend_7d, results_7d, impressions_7d, frequency_7d, daily_budget, learning`. Adds the tired-audience, learning and budget flags.
+
+It prints JSON with totals and flags. Use its numbers as they are; how it decides is in `references/rules.md`.
+
+**How the script decides, in one paragraph** (you'll need it to explain flags): leads and sales are rare events, so a few days of zeros can be pure chance. For each ad the script asks: if this ad were really working at the target cost, how likely is a result this bad by bad luck? Under 10 in 100, it's probably real (pause candidate, or watch). Above that, it's too early to tell, and the script works out how much more spend (and how many days) it takes to know. This is what stops a small account from pausing ads on noise, and a big account from waiting a week on an ad that's clearly broken.
 
 ## 2. The target
 
@@ -49,6 +53,9 @@ Spent [x] · [n] results · [cost] per result (7-day average: [cost])
 **Watch today**
 - [Ad name]: [why]
 
+**Too early to tell**
+- [Ad name]: [why, and the date it will be clear]
+
 **Doing well**
 - [Ad name]: [cost per result] vs target [target]
 
@@ -58,9 +65,17 @@ Spent [x] · [n] results · [cost] per result (7-day average: [cost])
 Nothing here changes your ads. To pause one: Ads Manager > Ads > switch it off.
 ```
 
-Where the script's flags go: `pause_candidates` under Consider pausing; `watch_no_results`, `cost_rising` and `expensive_few_results` under Watch (an expensive ad that also spent at least two target results' worth in the week can go under Consider pausing, say why); `doing_well` under Doing well; the ad-set flags under Also worth knowing. Each ad appears in one section only: if it fits two, put it in the more urgent one.
+Where the script's flags go:
+- `pause_candidates` → Consider pausing.
+- `results_slowing`, `expensive_few_results`, `yesterday_weak`, `clicks_falling` → Watch. `results_slowing` matters most here: an ad whose weekly average still looks fine but whose last three days collapsed. Say both halves ("17 a lead for four days, then nothing for €90"). If it comes with `clicks_falling`, people are tiring of the creative: suggest preparing a fresh version rather than pausing. If it carries `after_click`, people kept clicking but stopped converting, so something after the click may be broken: tell the owner to send a test lead through their own form first (five minutes, and it rules out a broken form or tracking before they spend on a new ad). When both are present, the test lead comes first.
+- `too_early` → a short "Too early to tell" section: the ad, the bad-luck chance, and the date it will be clear (today + `days_left`). This is where the decision dates come from. If `days_left` is more than about two weeks, say plainly that at this budget the ad can't be judged soon, and that's a budget question, not an ad question.
+- `doing_well` → Doing well.
+- the ad-set flags (`tired_audience`, `learning_limited`, `underspending`) → Also worth knowing.
+Each ad appears in one section only: if it fits two, put it in the more urgent one.
 
-The "Do today" line is there because a list of flags still leaves the owner to work out what to do first. Pick one thing. If the honest answer is "nothing", say "Nothing to do today" and still give a date: when the next real decision comes (for example "by Friday Before after photos will have spent about two leads' worth; pause it then if still nothing"). Work it out from the ad's daily spend and the pause threshold. A quiet report with a date tells the owner when to pay attention again; without one they keep checking.
+Say the chance in words the owner can weigh: "about 8 in 100 that this is bad luck", never "p = 0.08". Don't add your own pause calls on ads the script put under `too_early`: an ad 50% over target on one result looks bad and usually isn't yet, and saying so is the most useful thing this check does.
+
+The "Do today" line is there because a list of flags still leaves the owner to work out what to do first. Pick one thing. If the honest answer is "nothing", say "Nothing to do today" and still give a date: when the next real decision comes (for example "by Friday Before after photos will have spent about two leads' worth; pause it then if still nothing"). The script gives it as `days_left` on `too_early` ads. A quiet report with a date tells the owner when to pay attention again; without one they keep checking.
 
 How to write it:
 - Lead with money. "Spent €43 in a week and brought no leads" lands; "zero conversion rate" doesn't.

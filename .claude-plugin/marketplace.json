@@ -3,14 +3,14 @@
   "owner": { "name": "Primores", "url": "https://primores.org" },
   "metadata": {
     "description": "Narrow, free Claude skills for small businesses that get customers from Meta ads. Each one does one daily job.",
-    "version": "0.1.0"
+    "version": "0.2.0"
   },
   "plugins": [
     {
       "name": "meta-ads-daily-check",
       "source": "./plugins/meta-ads-daily-check",
       "description": "A 2-minute morning check of your Facebook and Instagram ads: yesterday's spend and cost per result, ads spending with nothing to show, and what to consider pausing. Read-only.",
-      "version": "0.1.0",
+      "version": "0.2.0",
       "category": "marketing",
       "keywords": ["meta-ads", "facebook-ads", "instagram-ads", "daily-report", "small-business"]
     }
