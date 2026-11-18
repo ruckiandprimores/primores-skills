@@ -1,0 +1,6 @@
+{
+  "name": "primores-skills",
+  "owner": { "name": "Primores", "url": "https://primores.org" },
+  "metadata": { "description": "Free skills from Primores for small businesses that run on Meta ads.", "version": "0.1.0" },
+  "plugins": []
+}
