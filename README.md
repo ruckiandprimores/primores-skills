@@ -10,7 +10,7 @@ Coming soon.
 
 ## Install
 
-In the Claude app: Settings > Customize > Plugins > Add marketplace, then enter `ruckiandprimores/primores-skills` and install the plugin you want.
+In the Claude app (web, desktop or Cowork, any paid plan): Customize > Plugins > Add > "Add marketplace" > "Add from a repository", enter `ruckiandprimores/primores-skills`, then install the plugin you want. Anthropic doesn't review plugins you add this way, so read what a plugin does before you install it.
 
 ## Before you use them for your business
 
