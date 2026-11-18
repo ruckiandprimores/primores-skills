@@ -5,7 +5,7 @@ description: Morning check of a small business's Meta (Facebook and Instagram) a
 
 # Meta ads daily check
 
-A two-minute morning read of someone's Meta ads, written for a business owner, not a media buyer. The point is to catch money leaking early (an ad spending with nothing to show for it) and to make the next decision obvious. Everything here is read-only: you look and recommend, the owner decides and acts in Ads Manager.
+A 30-second morning message about someone's Facebook and Instagram ads, written for a business owner, not a media buyer: which ad is wasting money and what to click. The point is to catch money leaking early (an ad spending with nothing to show for it) and to make the next decision obvious. Everything here is read-only: you look and recommend, the owner decides and acts in Ads Manager.
 
 ## Why read-only
 
@@ -38,58 +38,46 @@ If the account mixes result types (leads in one campaign, purchases in another),
 
 ## 3. Write the check
 
-Keep it to one screen. Use this structure, and leave out any section that has nothing in it:
+The reader runs a business, not ads. They don't know what "cost per result", "frequency" or "learning" mean and shouldn't have to. They want to know one thing: **is any ad wasting my money, and what do I click?** So the report is a short list of instructions, not an analysis. The script does the thinking; you translate its verdicts into actions.
+
+Use exactly this shape:
 
 ```
-**Meta ads, [weekday date] (yesterday)**
-Spent [x] · [n] results · [cost] per result (7-day average: [cost])
-[Only if spend_change is set: "That's [n]% more/less than your usual [avg] a day." plus the likeliest reason if you can see it]
+**Your Facebook & Instagram ads, [weekday date]**
+Yesterday: [spent] → [n] [leads/sales/bookings, in their word]. [One plain verdict: "A normal day." / "Worse than usual." / "Better than usual."]
 
-**Do today:** [the one action that matters most, with the decision date if it's a wait: "pause X", or "leave X until Thursday; pause if still no leads"]
+1. **[Verb] "[Ad name]"**: [why in one short sentence, with one money number]. [Where to click, if they need to do something.]
+2. ...
+3. ...
 
-**Consider pausing**
-- [Ad name] ([ad set]): [why, with the number]
-
-**Watch today**
-- [Ad name]: [why]
-
-**Too early to tell**
-- [Ad name]: [why, and the date it will be clear]
-
-**Doing well**
-- [Ad name]: [cost per result] vs target [target]
-
-**Also worth knowing**
-- [tired audience / learning limited / budget not spending, one line each]
-
-Nothing here changes your ads. To pause one: Ads Manager > Ads > switch it off.
+Your best ad right now: "[Ad name]" ([cost] per [lead]).
+I don't change anything myself. Ask me "why?" about any line for the details.
 ```
 
-Where the script's flags go:
-- `pause_candidates` → Consider pausing.
-- `results_slowing`, `expensive_few_results`, `yesterday_weak`, `clicks_falling` → Watch. `results_slowing` matters most here: an ad whose weekly average still looks fine but whose last three days collapsed. Say both halves ("17 a lead for four days, then nothing for €90"). If it comes with `clicks_falling`, people are tiring of the creative: suggest preparing a fresh version rather than pausing. If it carries `after_click`, people kept clicking but stopped converting, so something after the click may be broken: tell the owner to send a test lead through their own form first (five minutes, and it rules out a broken form or tracking before they spend on a new ad). When both are present, the test lead comes first.
-- `too_early` → a short "Too early to tell" section: the ad, the bad-luck chance, and the date it will be clear (today + `days_left`). This is where the decision dates come from. If `days_left` is more than about two weeks, say plainly that at this budget the ad can't be judged soon, and that's a budget question, not an ad question.
-- `doing_well` → Doing well.
-- the ad-set flags (`tired_audience`, `learning_limited`, `underspending`) → Also worth knowing.
-Each ad appears in one section only: if it fits two, put it in the more urgent one.
+The numbered lines, at most three, most urgent first. Each starts with a verb the owner can do or consciously not do:
+- **Turn off** (from `pause_candidates`): "Turn off "Invisalign reel": €75 spent this week, no customers, and that's not bad luck. → Ads Manager, find the ad, flip the switch to off."
+- **Fill in your own form** (when `results_slowing` has `after_click`): "People still click "Whitening video" but nobody has signed up for 3 days. Fill in your own form once today to check it still works."
+- **Make a new version of** (from `results_slowing` with `clicks_falling`, or `results_slowing` alone): "Make a new version of "Whitening video" (same offer, new first 3 seconds). People have stopped responding to this one."
+- **Keep an eye on** (from `expensive_few_results`, `yesterday_weak`, `clicks_falling` alone): "Keep an eye on "New scents carousel": €84 for one sale, about 4× your usual. If no sale by Friday, turn it off."
+- **Leave alone until [date]** (from `too_early`, date = today + `days_left`): "Leave "Implant carousel" alone until 30 Nov. One lead for €45 looks bad but it's too early to judge."
+- **Ask whoever set up your ads** (from `underspending`, `learning_limited`): "Ask whoever set up your ads why "Interest gifts" only spent €11 of its €30 a day."
 
-Say the chance in words the owner can weigh: "about 8 in 100 that this is bad luck", never "p = 0.08". Don't add your own pause calls on ads the script put under `too_early`: an ad 50% over target on one result looks bad and usually isn't yet, and saying so is the most useful thing this check does.
-
-The "Do today" line is there because a list of flags still leaves the owner to work out what to do first. Pick one thing. If the honest answer is "nothing", say "Nothing to do today" and still give a date: when the next real decision comes (for example "by Friday Before after photos will have spent about two leads' worth; pause it then if still nothing"). The script gives it as `days_left` on `too_early` ads. A quiet report with a date tells the owner when to pay attention again; without one they keep checking.
-
-How to write it:
-- Lead with money. "Spent €43 in a week and brought no leads" lands; "zero conversion rate" doesn't.
-- Every flag has its number and the comparison behind it, so the owner can disagree.
-- Say what each flag means for a decision: "pause candidate", "give it until tomorrow", "fine, leave it".
-- No jargon without a plain word next to it: frequency becomes "people saw it 4 times on average"; learning limited becomes "too few results for Meta to optimise".
-- If nothing is flagged, say so in one line ("Nothing to act on today") and stop. A quiet day is a good report.
-- Don't recommend raising budgets by more than about 20% at a time on "doing well" ads; bigger jumps send an ad set back into learning. Mention it only when the owner asks what to do with a winner.
+Rules:
+- If the script flagged nothing, the list is one line: "1. **Nothing to do today.**" Then the best-ad line and the footer. A quiet report is a good report.
+- If there are more than three actions, keep the three that cost the most money and end with "(2 smaller things; ask me "what else?")".
+- One money number per line, in their currency. No percentages of percentages, no "7-day average", no odds in numbers. The chance of bad luck becomes words: "and that's not bad luck" (pause), "too early to judge" (too_early).
+- Use their word for a result: leads, sales, bookings, calls. Never "results" or "conversions".
+- Tired audiences on retargeting, spend jumps under about 50%, and anything else that needs no action: leave out. Mention a spend jump only if it's big and unexplained ("You spent twice your usual yesterday. Did someone raise a budget?").
+- No target set: add one line before the footer: "Tell me the most you'd pay for one [lead] and I'll judge your ads against that instead of your own average."
+- When they ask "why?", then give the detail: the numbers, the comparison, the odds ("about 8 in 100 that it's bad luck"), and the rule from `references/rules.md`.
+- Don't add pause calls of your own on ads the script put under `too_early`. An ad 50% over target on one lead looks bad and usually isn't yet; "leave it alone until [date]" is the most useful thing this check says.
+- Don't suggest raising budgets unless asked; if asked, no more than about 20% at a time.
 
 ## 4. Things to watch for
 
 - **Yesterday may be incomplete.** Meta's numbers for the last day can still update for a few hours, and conversions can arrive later. If the check runs early in the morning, note that yesterday may still move.
-- **Very small spend.** If the whole account spent less than about two target results yesterday, most flags are noise. Say that instead of listing them.
-- **Brand-new ads** (running under 3 days) haven't had a fair chance. Don't put them in "consider pausing"; put them in "watch".
+- **Very small spend.** The script already treats small numbers as "too early" rather than flagging them. If even the decision dates are weeks away, say once, plainly: "At [budget] a day, it takes weeks to know which ad works. That's a budget question for whoever runs your ads."
+- **Brand-new ads** (running under 3 days) haven't had a fair chance. Never "turn off"; at most "leave alone until [date]".
 - **Different currencies or time zones** across accounts: report each account separately.
 
 ## Running it every morning

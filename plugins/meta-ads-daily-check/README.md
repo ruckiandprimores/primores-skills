@@ -1,79 +1,65 @@
-# Meta ads daily check: a Claude skill for your morning Facebook and Instagram ads report
+# Meta ads daily check: know every morning which Facebook ad is wasting your money
 
-A free Claude skill that checks your Meta ads every morning and tells you, in plain words, what happened yesterday and what to do about it. Read-only: it never changes, pauses or edits an ad.
+Every morning, Claude looks at your Facebook and Instagram ads and sends you a short message: which ad to turn off, which to leave alone, and exactly where to click. No dashboards, no marketing words. It takes 30 seconds to read.
 
-**Who it's for:** owners of small businesses who run their own Facebook and Instagram ads (or pay someone to) and want to know each morning whether money is leaking, without opening Ads Manager and reading columns.
+It never changes anything in your ads. You stay the one who clicks.
 
-## What you get every morning
+## What the morning message looks like
 
-- Yesterday's spend, results and cost per result, next to your 7-day average.
-- A line when spend jumped or dropped against your usual day.
-- **One thing to do today**, so you don't have to work out the priority yourself.
-- Ads to **consider pausing**, only when the numbers say it's unlikely to be bad luck ("about 2 in 100 that this is chance").
-- Ads to **watch**: an ad whose weekly average still looks fine but which stopped bringing leads in the last few days, fewer people clicking, or one or two results at well over your target.
-- Ads that are **too early to tell**, with the date they'll be clear. This is what stops you pausing a good ad after two quiet days.
-- A nudge to **test your own form** when people keep clicking but leads stop.
-- Ads **doing well** against your target.
-- The ad-set problems that quietly cost money: audiences seeing the same ad too often, ad sets stuck in "learning limited", budgets not spending.
-
-Every flag comes with its number and the reason, so you can disagree. Flags are decided by how likely the result is by chance, not by fixed rules, so a €5-a-day account and a €500-a-day account are judged fairly. The thresholds are written down in [rules.md](skills/meta-ads-daily-check/references/rules.md), and a small script applies them the same way every day.
-
-## Sample output
-
-> **Meta ads, Tuesday 17 November (yesterday)**
-> Spent €68 · 1 lead · €68 per lead (7-day average: €31.33, against your €30 target)
-> Yesterday's numbers can still move by a few hours' worth of late leads, so treat that €68 as provisional.
+> **Your Facebook & Instagram ads, Wednesday 18 Nov**
+> Yesterday: €68 spent → 1 lead. Worse than usual (you normally get about 2 a day for that).
 > 
-> **Do today:** get a fresh version of the Whitening offer video made and into its ad set. It was your best ad and has stopped bringing leads; at €30 a day it's where most of the money is leaking.
+> 1. **Fill in your own form for "Whitening offer video"**: it was your busiest ad, but €90 over the last 3 days brought no leads while people kept clicking. Send yourself a test lead today. If it arrives fine, make a new version of the ad (same offer, new first 3 seconds), because fewer people are clicking on this one too.
+> 2. **Turn off "Invisalign reel"**: €75 spent this week, no leads, and that's not bad luck. → Ads Manager, find the ad, flip the switch to off.
+> 3. **Leave "Implant consult carousel" alone until 30 Nov**: one lead for €45 looks bad, but at its small budget it's too early to judge.
 > 
-> **Consider pausing**
-> - Invisalign reel (Adults 20-40 15km): spent €75 in 7 days with no leads. At €30 a lead it should have brought about 2.5, and the chance of none by bad luck is about 8 in 100. That's a pattern, not a bad week.
-> 
-> **Watch today**
-> - Whitening offer video (Women 25-50 10km): 7 leads for €120 (€17 each) in the first four days, then nothing for €90 over the last three, when about 5 were expected. About 1 in 100 that this is bad luck. Clicks fell at the same time: 1.96% of people who saw it clicked in the first three days, 0.91% in the last three. People in that 10 km radius are tiring of this video, so a new cut of the same whitening offer (new opening, new visuals) is a better fix than pausing. If you don't have a new version up by Friday and it still has no leads, pause it then.
-> 
-> **Too early to tell**
-> - Implant consult carousel (Adults 45-70 15km): 1 lead for €45. That looks slow, but there's about a 56 in 100 chance it's just luck. It needs about €117 spent to tell, which at €6-7 a day is around Monday 30 November. Leave it until then.
-> 
-> **Doing well**
-> - Family dentist static (Parents 28-45 10km): €20 per lead over 7 days vs your €30 target, a lead every day.
-> 
-> Nothing here changes your ads. To pause one: Ads Manager > Ads > switch it off.
+> Your best ad right now: "Family dentist static" (€20 per lead).
+> I don't change anything myself. Ask me "why?" about any line for the details.
 
-*(Made-up account. Your check uses your own ad names and currency.)*
+*(Made-up dental clinic. Yours uses your own ads and currency.)*
 
-## What it is honestly good at, and what it isn't
+That's it. If you want the detail behind a line, ask "why?" and Claude explains the numbers.
 
-We tested it against Claude with no skill on the same numbers, four made-up accounts. Plain Claude spots most of the big problems if you hand it the data and ask well. What the skill adds:
-- **The routine.** It pulls the numbers itself through the Meta Ads connector, uses the same rules and the same one-screen format every morning, and stays read-only.
-- **The odds.** It says how likely a bad-looking number is to be chance, and when an unproven ad will be clear. Plain Claude tends to say "too early" without saying until when.
-- **Day-by-day reading.** With a by-day export or the connector, it catches an ad that stopped working this week while its weekly average still looks fine.
+## Why it's worth having
 
-What it can't know: whether your leads were any good. Cost per lead can look great while nobody picks up the phone. If you already have a media buyer reading your account daily, you don't need this.
+- **It catches money leaking early.** An ad that's spent €75 and brought nobody is easy to miss when you only look at the weekly total.
+- **It stops you turning off good ads too soon.** Two quiet days often mean nothing. It tells you when it's too early to judge, and the date when it won't be.
+- **It notices when something breaks.** If people keep clicking but nobody signs up, it tells you to test your own form before you blame the ad.
+- **It's the same check every day.** Same rules, same format, so you learn to read it in seconds.
 
-## Setup (5 minutes)
+## Set it up (about 5 minutes)
 
-1. Install the plugin: see [install instructions](../../docs/install.md). Short version for the Claude app: Customize > Plugins > Add > "Add marketplace" > "Add from a repository" > `ruckiandprimores/primores-skills`, then install `meta-ads-daily-check`.
-2. Switch on the **Meta Ads** connector in Customize > Connectors and sign in with the Facebook account that has access to your ad account. No connector? The skill asks you for two exports from Ads Manager instead ([how](skills/meta-ads-daily-check/references/export-from-ads-manager.md)).
-3. Tell Claude your target: "Target cost per lead: €25". Put it in your project's instructions so every check uses it.
-4. Ask: "How did my ads do yesterday?"
+You need a paid Claude plan and access to your Facebook ad account.
 
-**Every morning without asking:** in Claude Cowork, create a scheduled task, for example "Every weekday at 8:00, run the Meta ads daily check for [account], target cost per lead €25."
+1. **Add the skill to Claude.** In Claude, open **Customize**, then **Plugins**, then **Add**. Choose **Add marketplace**, then **Add from a repository**, and type `ruckiandprimores/primores-skills`. Install **meta-ads-daily-check**.
+2. **Connect your ad account.** Still in **Customize**, open **Connectors**, switch on **Meta Ads**, and log in with the Facebook account you use for ads.
+3. **Tell Claude what a customer is worth.** Type, for example: "The most I'll pay for one lead is €30." (Not sure? Ask Claude to help you work it out from your average sale.)
+4. **Ask:** "How did my ads do yesterday?"
+
+**To get it every morning without asking:** in Claude Cowork, create a scheduled task: "Every weekday at 8:00, check my Facebook ads." It runs even when your computer is off.
+
+**No time, or got stuck?** [Send us a message](https://primores.org) and we'll set it up for you.
 
 ## What it never does
 
-- Never pauses, edits, creates or deletes an ad, even if you ask during the check. It tells you where to click; you click.
-- Never changes budgets or bids.
-- Never sends your numbers anywhere except your own Claude conversation.
+- Never turns off, edits or creates an ad. It tells you where to click; you click.
+- Never changes your budget.
+- Never sends your numbers anywhere outside your own Claude.
 
-## FAQ
+## Questions
 
-**Does it work with Instagram ads?** Yes. Instagram ads run through Meta Ads Manager, so they're in the same account.
+**Does it work for Instagram ads?** Yes. Instagram ads run from the same Facebook ad account.
 
-**What if I sell online, not leads?** Use your target cost per purchase instead. If one account has both lead and purchase campaigns, the skill checks them separately.
+**I sell online, not leads.** Same thing: tell it the most you'll pay for one sale.
 
-**Why doesn't it just pause bad ads for me?** One bad day often looks worse than it is, and a paused ad restarts Meta's learning when you switch it back on. A person should make that call.
+**Why doesn't it just turn bad ads off for me?** One bad day often looks worse than it is, and an ad you turn off and back on has to start learning again. A person should make that call.
 
-**Can I use it for my business on a Pro plan?** Depends where you are. In the EU, EEA, Switzerland and the UK, Anthropic's consumer plans don't allow business use; use Claude Team or Enterprise there.
+**Is it smarter than asking Claude myself?** Not much, if you know what to ask and paste in the right numbers. What it adds is that it gets the numbers itself, every morning, checks them the same way each time, and knows the difference between bad luck and a real problem. If someone already checks your ads every day, you don't need it.
 
-**Is it really free?** Yes, MIT licence. It's made by [Primores](https://primores.org), a Meta and Telegram ads agency; if you'd rather someone ran the ads for you, that's what we do.
+**Can I use it for my business on Claude Pro?** Depends where you are. In the EU, EEA, Switzerland and the UK, Anthropic's personal plans don't allow business use; use Claude Team or Enterprise there.
+
+**Is it really free?** Yes. It's made by [Primores](https://primores.org). We run Facebook, Instagram and Telegram ads for businesses; if you'd rather someone ran your ads for you, that's what we do.
+
+---
+
+*For the technically curious: how each flag is decided is in [rules.md](skills/meta-ads-daily-check/references/rules.md); the arithmetic is a small script in [scripts/](skills/meta-ads-daily-check/scripts/). Claude Code users: `claude plugin marketplace add ruckiandprimores/primores-skills`, then `claude plugin install meta-ads-daily-check@primores-skills`.*

@@ -1,7 +1,7 @@
 {
   "name": "meta-ads-daily-check",
   "description": "A 2-minute morning check of your Meta (Facebook and Instagram) ads: yesterday's spend and cost per result, ads spending with no results, costs creeping up, and what to consider pausing. Read-only: it never changes your ads.",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "author": { "name": "Primores", "url": "https://primores.org" },
   "homepage": "https://github.com/ruckiandprimores/primores-skills/tree/main/plugins/meta-ads-daily-check",
   "license": "MIT",

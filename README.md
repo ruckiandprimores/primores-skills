@@ -10,7 +10,7 @@ Made by [Primores](https://primores.org). We run Meta and Telegram ads for small
 
 | Skill | The daily job | You need | Status |
 |---|---|---|---|
-| [**meta-ads-daily-check**](plugins/meta-ads-daily-check/) | Morning check of your Facebook and Instagram ads: yesterday's spend and cost per result, ads spending with no results, costs creeping up, what to consider pausing | Meta Ads connector, or an Ads Manager export | Ready |
+| [**meta-ads-daily-check**](plugins/meta-ads-daily-check/) | Every morning: which Facebook or Instagram ad is wasting your money, which to leave alone, and exactly what to click | Meta Ads connector, or an Ads Manager export | Ready |
 | lead-reply-drafts | New leads scored against your rules, with a reply and three free calendar slots drafted in Gmail | Gmail and Google Calendar connectors, a Google Sheet of leads | Planned |
 | lead-follow-up | Who hasn't answered in two days, with follow-ups drafted | Same Google Sheet | Planned |
 | booked-to-meta | Marks which leads booked, so Meta can optimise your ads for bookings instead of form fills | Google Sheet + a free Zapier step | Planned |
