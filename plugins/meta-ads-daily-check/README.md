@@ -38,7 +38,7 @@ You need a paid Claude plan and access to your Facebook ad account.
 
 **To get it every morning without asking:** in Claude Cowork, create a scheduled task: "Every weekday at 8:00, check my Facebook ads." It runs even when your computer is off.
 
-**No time, or got stuck?** [Send us a message](https://primores.org) and we'll set it up for you.
+**No time, or got stuck?** [Send us a message](https://primores.org/contact/) and we'll set it up for you.
 
 ## What it never does
 
